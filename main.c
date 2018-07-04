@@ -12,16 +12,6 @@
 
 #include "fractol.h"
 
-// while (x*x + y*y < 2*2) && iteration < max)
-// {
-// 	int xtemp;
-// 	xtemp = x*x - y*y + x0;
-// 	y = 2 * x*y + y0;
-// 	x = xtemp;
-// 	iteration +=1;
-// }
-
-
 double mapToReal(int x, int imageWidth, double minR, double maxR)
 {
 	double range = maxR - minR;
@@ -48,32 +38,6 @@ int findMandel(double cr, double ci, int max)
 	}
 	return (i);
 }
-// void test_mandle(int h, int w, int max)
-// {
-// 	int r = 0;
-// 	int c = 0;
-// 	while (r < h)
-// 	{
-// 		while (c < w)
-// 		{
-// 			double c_re = (c - w/2.0) * 4.0 / w;
-// 			double c_i = (r - h / 2.0) * 4.0 / w;
-// 			double x = 0;
-// 			double y = 0;
-// 			int iter = 0;
-// 			while (x * x + y * y && iter < max)
-// 			{
-// 				double x_new = x*x - y*y + c_re;
-// 				y = 2 * x * y + c_i;
-// 				x = x_new;
-// 				iter++;
-// 			}
-// 			c++;
-// 		}
-// 		c= 0;
-// 		r++;
-// 	}
-// }
 
 char *ft_rgb_to_hex(int r, int g, int b)
 {
@@ -100,11 +64,9 @@ int main(void)
 	t_window win;
 
 	ft_bzero(&win, sizeof(t_window));
+	//validate(&win);
 	init_window(&win);
 	open_win(&win, "FDF", (SCREEN_H), (SCREEN_W));
-	
-	//mlx_put_image_to_window(&win.mlx,&win.win, &win.img, 0, 0);
-	//draw_map(&win, SCREEN_H, SCREEN_W);
 	mlx_hook(win.win, 20, 0, get_input, &win);
 	mlx_key_hook(win.win, key_hook, &win);
 	mlx_hook(win.win, 6, 0, mouse_move, &win);

@@ -2,20 +2,13 @@
 
 void open_win(t_window *win, char *name, int h, int w)
 {
-
-	int w0;
-	int h0;
-
-	w0 = 400;
-	h0 = 400;
-
 	win->mlx = mlx_init();
 	win->win = mlx_new_window(win->mlx, w, h, name);
 	win->title = name;
-	win->img = mlx_new_image(win->mlx,w0, h0);
+	win->img = mlx_new_image(win->mlx, IMG_SIZE, IMG_SIZE);
 	win->addr = mlx_get_data_addr(win->img, &win->bpp, &win->size_line, &win->endian);
-	start(win, w0, h0);
-	mlx_put_image_to_window(win->mlx, win->win, win->img, 50, 50);
+	start(win, IMG_SIZE, IMG_SIZE);
+	mlx_put_image_to_window(win->mlx, win->win, win->img, win->x_off, win->y_off);
 	char *number;
 	win->track++;
 	number = ft_itoa(win->track);
