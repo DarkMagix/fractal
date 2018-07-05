@@ -59,19 +59,29 @@ char *ft_rgb_to_hex(int r, int g, int b)
 	strcat(res,"\0");
 	return res;
 }
-int main(void)
+int main(int ac, char **av)
 {
 	t_window win;
 
 	ft_bzero(&win, sizeof(t_window));
 	//validate(&win);
-	init_window(&win);
-	open_win(&win, "FDF", (SCREEN_H), (SCREEN_W));
-	mlx_hook(win.win, 20, 0, get_input, &win);
-	mlx_key_hook(win.win, key_hook, &win);
-	mlx_hook(win.win, 6, 0, mouse_move, &win);
-	mlx_mouse_hook(win.win, mouse_hook, &win);
-	mlx_loop(win.mlx);
-	mlx_destroy_image(&win.mlx, &win.img);
+	if (ac == 2)
+	{
+		printf("Here\n");
+		init_window(&win);
+		if ((validate_fractal(av[1], &win) == 0))
+			return (0);
+		printf("c_fract: %c", *(&win.c_fract));
+		open_win(&win, "FDF", (SCREEN_H), (SCREEN_W));
+		mlx_hook(win.win, 20, 0, get_input, &win);
+		mlx_key_hook(win.win, key_hook, &win);
+		mlx_hook(win.win, 6, 0, mouse_move, &win);
+		mlx_hook(win.win, 12, 0, controls_on_screen, &win);
+		mlx_mouse_hook(win.win, mouse_hook, &win);
+		mlx_loop(win.mlx);
+		mlx_destroy_image(&win.mlx, &win.img);
+	}
+	else
+		ft_putendl("Proper Usage: /fractal [fractal] (j, b, m)");
 	return (0);
 }

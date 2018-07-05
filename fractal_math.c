@@ -13,6 +13,7 @@ void julia_math(t_window *win)
   	win->oldRe = win->newRe;
     win->oldIm = win->newIm;
     win->newRe = win->oldRe * win->oldRe - win->oldIm * win->oldIm + win->cRe;
+    //win->newRe = win->oldRe * win->oldIm * win->oldIm + win->cRe;
     win->newIm = 2 * win->oldRe * win->oldIm + win->cIm;
 }
 
