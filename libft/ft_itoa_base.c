@@ -6,7 +6,7 @@
 /*   By: mweir <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 19:03:15 by mweir             #+#    #+#             */
-/*   Updated: 2018/06/26 14:47:30 by mweir            ###   ########.fr       */
+/*   Updated: 2018/07/06 14:55:19 by mweir            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char		*ft_itoa_base(long long int nbr, int base)
 	long long int	size;
 	char			*hex;
 
-	hex= ft_strdup("0123456789abcdef");
+	hex = ft_strdup("0123456789abcdef");
 	if (base < 2 || base > 16)
 		return (ft_strdup("0"));
 	nb = (nbr < 0) ? (-nbr) : nbr;
@@ -52,8 +52,7 @@ char		*ft_itoa_base(long long int nbr, int base)
 	index = 0;
 	if (!(res = (char*)malloc(sizeof(char) * (size + 1 + (nbr < 0 ? 1 : 0)))))
 		return (0);
-	if (nbr < 0 && base == 10 && (res[index] = '-'))
-		size++;
+	(nbr < 0 && base == 10 && (res[index] = '-')) ? size++ : 0;
 	index = size - 1;
 	while (nb >= base)
 	{

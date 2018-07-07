@@ -1,133 +1,81 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   input.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mweir <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/07/05 16:46:29 by mweir             #+#    #+#             */
+/*   Updated: 2018/07/05 16:46:30 by mweir            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fractol.h"
 
-int mouse_hook(int mousecode, int x, int y, t_window *win)
+void	alt_zoom(int kc, t_window *win)
 {
-	win->title = win->title;
+	if (kc == 126)
+		win->fract.zoom *= 1.35;
+	else if (kc == 125)
+		win->fract.zoom /= 1.35;
+}
+
+int		mouse_hook(int mousecode, int x, int y, t_window *win)
+{
 	if (mousecode == 1)
 	{
-		if (win->c_index >3)
+		if (win->c_index > 4)
 			win->c_index = 0;
-		
 		(win->c_index == 0) ? winter(win) : 0;
 		(win->c_index == 1) ? fiery(win) : 0;
 		(win->c_index == 2) ? green(win) : 0;
 		(win->c_index == 3) ? greyscale(win) : 0;
+		(win->c_index == 3) ? rainbow(win) : 0;
 		win->c_index++;
-		//start(win, IMG_SIZE, IMG_SIZE);
-
 	}
 	if (mousecode == 4)
-	{
-		win->cRe += .05;
-		win->cIm += .05;
-		//start(win, IMG_SIZE, IMG_SIZE);
-	}
-	else if (mousecode ==5)
-	{
-		win->cRe -= .05;
-		win->cIm -= .05;
-	}
+		win->fract.zoom /= 1.25;
+	else if (mousecode == 5)
+		win->fract.zoom *= 1.25;
 	start(win, IMG_SIZE, IMG_SIZE);
-	mlx_put_image_to_window(win->mlx, win->win, win->img, win->x_off, win->y_off);
-	win->track++;
-	win->number = ft_itoa(win->track);
-	
-	
+	mlx_put_image_to_window(win->mlx, win->win,
+		win->img, win->x_off, win->y_off);
 	return (x + y);
 }
-int	key_hook(int kc, t_window *win)
+
+int		key_hook(int kc, t_window *win)
 {
-	double zm = 0.25;
-	win->title = win->title;
+	double zm;
+
+	zm = 0.35;
 	if (kc == 53)
-	{
 		exit(1);
-	}
-	else if (kc == 9)
-	{
-		get_vitals(win);
-	}
 	else if (kc == 38)
-	{
-		win->c_fract = 'j';
-	//	start(win, IMG_SIZE, IMG_SIZE);
-	
-	}
-	else if (kc == 126)//zoom in
-	{
-		win->fract.zoom *= 1.1;
-	//	start(win, IMG_SIZE, IMG_SIZE);
-
-	}
-	else if (kc == 125) // zoom out
-	{
-		win->fract.zoom /= 1.1;
-	//	start(win, IMG_SIZE, IMG_SIZE);
-	}
-	else if (kc == 0)//a 
-	{
-		win->fract.moveX -= 1 / (win->fract.zoom / zm);
-	//	start(win, IMG_SIZE, IMG_SIZE);
-	}
-	else if (kc == 2)//d
-	{
-		win->fract.moveX += 1 / (win->fract.zoom / zm);
-	//	start(win, IMG_SIZE, IMG_SIZE);
-	}
-	else if (kc == 1)//w
-	{
-		win->fract.moveY += 1 / (win->fract.zoom /zm);
-	//	start(win, IMG_SIZE, IMG_SIZE);
-	}
-	else if (kc == 13)//s
-	{
-		win->fract.moveY -= 1 / (win->fract.zoom /zm);
-	//	start(win, IMG_SIZE, IMG_SIZE);
-	}
-	else if (kc == 15) //reset
-	{
-		if (win->c_fract == 'j')
-		{
-			win->fract.zoom = 0.751315;
-			win->fract.moveX =-0.133975;
-			win->fract.moveY = 0.0;
-			win->cRe= -0.7;
-			win->cIm= 0.27015;
-			win->lastx = win->x_off * 2;
-			win->lasty = win->y_off * 2;
-		}
-		else if (win->c_fract == 'b')
-		{
-			//bship
-			win->fract.zoom = 0.909091;
-			win->fract.moveX =-0.408975;
-			win->fract.moveY = -0.550000;
-		}
-		else if (win->c_fract == 'm')
-		{
-			win->fract.zoom = 0.909091;
-			win->fract.moveX =-0.500000;
-			win->fract.moveY = 0;
-		}
-
-	}
+		init_julia(win);
+	else if (kc == 46)
+		init_mandel(win);
+	else if (kc == 11)
+		init_ship(win);
+	else if (kc == 0)
+		win->fract.move_x -= 1 / (win->fract.zoom / zm);
+	else if (kc == 2)
+		win->fract.move_x += 1 / (win->fract.zoom / zm);
+	else if (kc == 13)
+		win->fract.move_y -= 1 / (win->fract.zoom / zm);
+	else if (kc == 1)
+		win->fract.move_y += 1 / (win->fract.zoom / zm);
+	alt_zoom(kc, win);
+	reset_fractal(win, kc);
 	start(win, IMG_SIZE, IMG_SIZE);
-	mlx_put_image_to_window(win->mlx, win->win, win->img, win->x_off, win->y_off);
-	win->track++;
+	mlx_put_image_to_window(win->mlx, win->win,
+		win->img, win->x_off, win->y_off);
 	return (0);
 }
-int get_input()
-{
-	write(1, "test", 1);
-	return (1);
-}
-int mouse_move(int x, int y, t_window *win)
-{
-	char *m_x = 0;
-	char *m_y = 0;
 
+int		mouse_move(int x, int y, t_window *win)
+{
 	if (x >= win->x_off & x <= win->x_off + (IMG_SIZE)
-		 && y >= win->y_off && y <= win->y_off + (IMG_SIZE))
+		&& y >= win->y_off && y <= win->y_off + (IMG_SIZE))
 	{
 		if (win->lastx == 0 && win->lasty == 0)
 		{
@@ -136,19 +84,27 @@ int mouse_move(int x, int y, t_window *win)
 		}
 		else
 		{
-			win->cIm += (win->lasty - y) * 0.0025;
-			win->cRe += (win->lastx - x) * 0.0025;
+			win->c_im += (win->lasty - y) * 0.0025;
+			win->c_re += (win->lastx - x) * 0.0025;
 			win->lastx = x;
 			win->lasty = y;
 			start(win, IMG_SIZE, IMG_SIZE);
-			mlx_put_image_to_window(win->mlx, win->win, win->img, win->x_off, win->y_off);
-			m_x = ft_itoa(x);
-			m_y = ft_itoa(y);
-			mlx_string_put(win->mlx,win->win, win->x_off, win->y_off,0x00FF00, m_x);
-			mlx_string_put(win->mlx,win->win, win->x_off + 25, win->y_off + 25,0x00FF00, m_y);
-			free(m_x);
-			free(m_y);
+			mlx_put_image_to_window(win->mlx, win->win,
+				win->img, win->x_off, win->y_off);
 		}
 	}
 	return (0);
+}
+
+void	reset_fractal(t_window *win, int kc)
+{
+	if (kc == 15)
+	{
+		if (win->c_fract == 'j')
+			init_julia(win);
+		else if (win->c_fract == 'b')
+			init_ship(win);
+		else if (win->c_fract == 'm')
+			init_mandel(win);
+	}
 }

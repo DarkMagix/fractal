@@ -6,7 +6,7 @@
 #    By: mweir <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/05/18 15:36:24 by mweir             #+#    #+#              #
-#    Updated: 2018/07/03 19:41:05 by mweir            ###   ########.fr        #
+#    Updated: 2018/07/05 17:46:45 by mweir            ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -18,7 +18,7 @@ PATH_INC = ./libft/includes/
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
-SRC = main.c window.c input.c fractol.c colors.c extra.c fractal_math.c
+SRC = main.c window.c input.c fractol.c colors.c extra.c fractal_math.c input2.c
 
 HEAD = ./fractol.h
 
